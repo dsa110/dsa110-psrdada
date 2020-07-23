@@ -41,13 +41,13 @@ int dada_udp_sock_in(multilog_t* log, const char* iface, int port, int verbose)
   int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
   if (fd < 0) {
-    multilog(log, LOG_ERR, "dada_udp_sock_in: socket() failed [iface=%s, port=%d]: %s\n",
-             iface, port, strerror(errno));
+    //multilog(log, LOG_ERR, "dada_udp_sock_in: socket() failed [iface=%s, port=%d]: %s\n",
+    //       iface, port, strerror(errno));
     return -1;
   }
 
-  if (verbose) 
-    multilog(log, LOG_INFO, "created UDP socket\n");
+  //if (verbose) 
+  //multilog(log, LOG_INFO, "created UDP socket\n");
 
   struct sockaddr_in udp_sock;
   bzero(&(udp_sock.sin_zero), 8);                     // clear the struct
@@ -60,22 +60,22 @@ int dada_udp_sock_in(multilog_t* log, const char* iface, int port, int verbose)
   }
 
   if (bind(fd, (struct sockaddr *)&udp_sock, sizeof(udp_sock)) == -1) {
-    multilog (log, LOG_ERR, "dada_udp_sock_in: bind() failed [iface=%s, port=%d]: %s\n", 
-              iface, port, strerror(errno));
+    //multilog (log, LOG_ERR, "dada_udp_sock_in: bind() failed [iface=%s, port=%d]: %s\n", 
+    //        iface, port, strerror(errno));
     return -1;
   }
-  if (verbose) 
-    multilog(log, LOG_INFO, "bound UDP socket to %s:%d\n", iface, port);
+  //if (verbose) 
+  //multilog(log, LOG_INFO, "bound UDP socket to %s:%d\n", iface, port);
 
   /* ensure the socket is reuseable without the painful timeout */
   int on = 1;
-  if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) != 0) {
-    multilog (log, LOG_WARNING, "dada_udp_sock_in: setsockopt(SO_REUSEADDR) failed "
-              "[iface=%s, port=%d]: %s\n", iface, port, strerror(errno));
-  }
+  //if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) != 0) {
+    //multilog (log, LOG_WARNING, "dada_udp_sock_in: setsockopt(SO_REUSEADDR) failed "
+    //        "[iface=%s, port=%d]: %s\n", iface, port, strerror(errno));
+  //}
 
-  if (verbose) 
-    multilog(log, LOG_INFO, "UDP socket bound to %s:%d\n", iface, port);
+  //if (verbose) 
+  //multilog(log, LOG_INFO, "UDP socket bound to %s:%d\n", iface, port);
 
   return fd;
 
@@ -115,9 +115,9 @@ int dada_udp_sock_set_size (multilog_t* log, int fd, int verbose, int pref_size,
   // Check the size. n.b. linux actually sets the size to DOUBLE the value
   if (value*2 != pref_size && value/2 != pref_size)
   {
-    multilog (log, LOG_WARNING, "Warning. Failed to set udp socket's "
-              "buffer size to: %d, falling back to default size: %d (return value: %d)\n",
-              pref_size, std_buffer_size, value);
+    //multilog (log, LOG_WARNING, "Warning. Failed to set udp socket's "
+    //        "buffer size to: %d, falling back to default size: %d (return value: %d)\n",
+    //        pref_size, std_buffer_size, value);
 
     len = sizeof(value);
     value = std_buffer_size;
@@ -138,15 +138,15 @@ int dada_udp_sock_set_size (multilog_t* log, int fd, int verbose, int pref_size,
     }
 
     // If we could not set the buffer to the desired size, warn...
-    if (value/2 != std_buffer_size) {
-      multilog (log, LOG_WARNING, "Warning. Failed to set udp socket's "
-                "buffer size to: %d\n", std_buffer_size);
-    }
+    //if (value/2 != std_buffer_size) {
+    //multilog (log, LOG_WARNING, "Warning. Failed to set udp socket's "
+    //"buffer size to: %d\n", std_buffer_size);
+  //}
 
   } else {
 
-    if (verbose)
-      multilog(log, LOG_INFO, "UDP socket buffer size set to %d\n", pref_size);
+  //if (verbose)
+  // multilog(log, LOG_INFO, "UDP socket buffer size set to %d\n", pref_size);
 
   }
 

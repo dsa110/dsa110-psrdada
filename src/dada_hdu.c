@@ -9,12 +9,12 @@
 // #define _DEBUG
 
 /*! Create a new DADA Header plus Data Unit */
-dada_hdu_t* dada_hdu_create (multilog_t* log)
+dada_hdu_t* dada_hdu_create ()
 {
   dada_hdu_t* hdu = malloc (sizeof(dada_hdu_t));
   assert (hdu != 0);
 
-  hdu -> log = log;
+  //hdu -> log = log;
   hdu -> data_block = 0;
   hdu -> header_block = 0;
 
@@ -70,7 +70,7 @@ int dada_hdu_connect (dada_hdu_t* hdu)
 #endif
   if (ipcbuf_connect (hdu->header_block, hdu->header_block_key) < 0)
   {
-    multilog (hdu->log, LOG_ERR, "Failed to connect to Header Block\n");
+    //multilog (hdu->log, LOG_ERR, "Failed to connect to Header Block\n");
     free (hdu->header_block);
     hdu->header_block = 0;
     free (hdu->data_block);
@@ -83,7 +83,7 @@ int dada_hdu_connect (dada_hdu_t* hdu)
 #endif
   if (ipcio_connect (hdu->data_block, hdu->data_block_key) < 0)
   {
-    multilog (hdu->log, LOG_ERR, "Failed to connect to Data Block\n");
+    //multilog (hdu->log, LOG_ERR, "Failed to connect to Data Block\n");
     free (hdu->header_block);
     hdu->header_block = 0;
     free (hdu->data_block);
@@ -108,12 +108,12 @@ int dada_hdu_disconnect (dada_hdu_t* hdu)
   }
 
   if (ipcio_disconnect (hdu->data_block) < 0) {
-    multilog (hdu->log, LOG_ERR, "Failed to disconnect from Data Block\n");
+    //multilog (hdu->log, LOG_ERR, "Failed to disconnect from Data Block\n");
     status = -1;
   }
 
   if (ipcbuf_disconnect (hdu->header_block) < 0) {
-    multilog (hdu->log, LOG_ERR, "Failed to disconnect from Header Block\n");
+    //multilog (hdu->log, LOG_ERR, "Failed to disconnect from Header Block\n");
     status = -1;
   }
 
@@ -142,7 +142,7 @@ int dada_hdu_lock_read (dada_hdu_t* hdu)
   fprintf (stderr, "dada_hdu_lock_read: ipcbuf_lock_read(hdu->header_block)\n");
 #endif
   if (ipcbuf_lock_read (hdu->header_block) < 0) {
-    multilog (hdu->log, LOG_ERR, "Could not lock Header Block for reading\n");
+    //multilog (hdu->log, LOG_ERR, "Could not lock Header Block for reading\n");
     return -1;
   }
 
@@ -150,7 +150,7 @@ int dada_hdu_lock_read (dada_hdu_t* hdu)
   fprintf (stderr, "dada_hdu_lock_read: ipcio_open(hdu->data_block)\n");
 #endif
   if (ipcio_open (hdu->data_block, 'R') < 0) {
-    multilog (hdu->log, LOG_ERR, "Could not lock Data Block for reading\n");
+    //multilog (hdu->log, LOG_ERR, "Could not lock Data Block for reading\n");
     return -1;
   }
 
@@ -173,7 +173,7 @@ int dada_hdu_unlock_read (dada_hdu_t* hdu)
 #endif
   if (ipcio_close (hdu->data_block) < 0)
   {
-    multilog (hdu->log, LOG_ERR, "Could not unlock Data Block read\n");
+    //multilog (hdu->log, LOG_ERR, "Could not unlock Data Block read\n");
     return -1;
   }
 
@@ -197,7 +197,7 @@ int dada_hdu_unlock_read (dada_hdu_t* hdu)
   fprintf (stderr, "dada_hdu_unlock_read: ipcbuf_unlock_read (hdu->header_block)\n");
 #endif
   if (ipcbuf_unlock_read (hdu->header_block) < 0) {
-    multilog (hdu->log, LOG_ERR,"Could not unlock Header Block read\n");
+    //multilog (hdu->log, LOG_ERR,"Could not unlock Header Block read\n");
     return -1;
   }
 
@@ -224,7 +224,7 @@ int dada_hdu_lock_write_spec (dada_hdu_t* hdu, char writemode)
   }
 
   if (ipcbuf_lock_write (hdu->header_block) < 0) {
-    multilog (hdu->log, LOG_ERR, "Could not lock Header Block for writing\n");
+    //multilog (hdu->log, LOG_ERR, "Could not lock Header Block for writing\n");
     return -1;
   }
 
@@ -232,7 +232,7 @@ int dada_hdu_lock_write_spec (dada_hdu_t* hdu, char writemode)
   fprintf (stderr, "dada_hdu_lock_write_spec: ipcio_open()\n");
 #endif
   if (ipcio_open (hdu->data_block, writemode) < 0) {
-    multilog (hdu->log, LOG_ERR, "Could not lock Data Block for writing\n");
+    //multilog (hdu->log, LOG_ERR, "Could not lock Data Block for writing\n");
     return -1;
   }
 
@@ -255,7 +255,7 @@ int dada_hdu_unlock_write (dada_hdu_t* hdu)
     fprintf (stderr, "dada_hdu_unlock_write: ipcio_close (hdu->data_block)\n");
 #endif
     if (ipcio_close (hdu->data_block) < 0) {
-      multilog (hdu->log, LOG_ERR, "Could not unlock Data Block write\n");
+      //multilog (hdu->log, LOG_ERR, "Could not unlock Data Block write\n");
       return -1;
     }
   }
@@ -264,7 +264,7 @@ int dada_hdu_unlock_write (dada_hdu_t* hdu)
     fprintf (stderr, "dada_hdu_unlock_write: ipcbuf_unlock_write (hdu->header_block)\n");
 #endif
   if (ipcbuf_unlock_write (hdu->header_block) < 0) {
-    multilog (hdu->log, LOG_ERR, "Could not unlock Header Block write\n");
+    //multilog (hdu->log, LOG_ERR, "Could not unlock Header Block write\n");
     return -1;
   }
 
@@ -284,7 +284,7 @@ int dada_hdu_open_view (dada_hdu_t* hdu)
 
   if (ipcio_open (hdu->data_block, 'r') < 0)
   {
-    multilog (hdu->log, LOG_ERR, "Could not open Data Block for viewing\n");
+    //multilog (hdu->log, LOG_ERR, "Could not open Data Block for viewing\n");
     return -1;
   }
 
@@ -304,7 +304,7 @@ int dada_hdu_close_view (dada_hdu_t* hdu)
 
   if (ipcio_close (hdu->data_block) < 0)
   {
-    multilog (hdu->log, LOG_ERR, "Could not close Data Block view\n");
+    //multilog (hdu->log, LOG_ERR, "Could not close Data Block view\n");
     return -1;
   }
 
@@ -314,7 +314,7 @@ int dada_hdu_close_view (dada_hdu_t* hdu)
 int dada_hdu_open (dada_hdu_t* hdu)
 {
   /* pointer to the status and error logging facility */
-  multilog_t* log = 0;
+  //multilog_t* log = 0;
 
   /* The header from the ring buffer */
   char* header = 0;
@@ -326,7 +326,7 @@ int dada_hdu_open (dada_hdu_t* hdu)
   assert (hdu != 0);
   assert (hdu->header == 0);
 
-  log = hdu->log;
+  //log = hdu->log;
 
   while (!header_size)
   {
@@ -334,7 +334,7 @@ int dada_hdu_open (dada_hdu_t* hdu)
     header = ipcbuf_get_next_read (hdu->header_block, &header_size);
 
     if (!header) {
-      multilog (log, LOG_ERR, "Could not get next header\n");
+      //multilog (log, LOG_ERR, "Could not get next header\n");
       return -1;
     }
 
@@ -345,13 +345,13 @@ int dada_hdu_open (dada_hdu_t* hdu)
 
       if (ipcbuf_eod (hdu->header_block))
       {
-        multilog (log, LOG_INFO, "End of data on header block\n");
+        //multilog (log, LOG_INFO, "End of data on header block\n");
         if (ipcbuf_is_reader (hdu->header_block))
           ipcbuf_reset (hdu->header_block);
       }
       else
       {
-        multilog (log, LOG_ERR, "Empty header block\n");
+        //multilog (log, LOG_ERR, "Empty header block\n");
         return -1;
       }
     }
@@ -361,11 +361,11 @@ int dada_hdu_open (dada_hdu_t* hdu)
 
   /* Check that header is of advertised size */
   if (ascii_header_get (header, "HDR_SIZE", "%"PRIu64, &hdr_size) != 1) {
-    multilog (log, LOG_ERR, "Header with no HDR_SIZE. Setting to %"PRIu64"\n",
-              header_size);
+    //multilog (log, LOG_ERR, "Header with no HDR_SIZE. Setting to %"PRIu64"\n",
+    //header_size);
     hdr_size = header_size;
     if (ascii_header_set (header, "HDR_SIZE", "%"PRIu64, hdr_size) < 0) {
-      multilog (log, LOG_ERR, "Error setting HDR_SIZE\n");
+      //multilog (log, LOG_ERR, "Error setting HDR_SIZE\n");
       return -1;
     }
   }
@@ -374,9 +374,9 @@ int dada_hdu_open (dada_hdu_t* hdu)
     header_size = hdr_size;
 
   else if (hdr_size > header_size) {
-    multilog (log, LOG_ERR, "HDR_SIZE=%"PRIu64
-              " > Header Block size=%"PRIu64"\n", hdr_size, header_size);
-    multilog (log, LOG_DEBUG, "ASCII header dump\n%s", header);
+    //multilog (log, LOG_ERR, "HDR_SIZE=%"PRIu64
+    //        " > Header Block size=%"PRIu64"\n", hdr_size, header_size);
+    //multilog (log, LOG_DEBUG, "ASCII header dump\n%s", header);
     return -1;
   }
 

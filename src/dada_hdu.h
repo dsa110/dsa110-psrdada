@@ -41,7 +41,8 @@ extern "C" {
   } dada_hdu_t;
 
   /*! Create a new DADA Header plus Data Unit */
-  dada_hdu_t* dada_hdu_create (multilog_t* log);
+  //dada_hdu_t* dada_hdu_create (multilog_t* log);
+  dada_hdu_t* dada_hdu_create ();
 
   /*! Set the key of the DADA Header plus Data Unit */
   void dada_hdu_set_key (dada_hdu_t* hdu, key_t key);
